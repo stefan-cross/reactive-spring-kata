@@ -27,7 +27,8 @@ fun main(args: Array<String>) {
 fun routerFunction(): RouterFunction<ServerResponse> {
 	return router {
 		GET("/fpr/hello-world") {
-			ServerResponse.ok().body(Mono.just("Hello ${it.queryParam("name")}"), String::class.java)
+			ServerResponse.ok()
+					.body(Mono.just("Hello ${it.queryParam("name").ifPresent { it }}"), String::class.java)
 		}
 	}
 }
