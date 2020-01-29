@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
 import reactor.core.publisher.Mono
 
+
 @SpringBootApplication
 class ReactiveKataApplication
 
@@ -17,7 +18,11 @@ fun main(args: Array<String>) {
 			.initializers(
 				beans {
 					bean {
-						routerFunction()
+						router {
+							GET("/frp/hello") {
+								ServerResponse.ok().body(Mono.just("Hello"), String::class.java)
+							}
+						}.andOther(routerFunction())
 					}
 			})
 			.build()
@@ -26,7 +31,7 @@ fun main(args: Array<String>) {
 
 fun routerFunction(): RouterFunction<ServerResponse> {
 	return router {
-		GET("/fpr/hello-world") {
+		GET("/frp/hello-world") {
 			ServerResponse.ok()
 					.body(Mono.just("Hello ${it.queryParam("name").ifPresent { it }}"), String::class.java)
 		}
