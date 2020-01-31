@@ -1,6 +1,7 @@
 package com.opentuned.reactivekata
 
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,20 +18,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 class ReactiveKataApplicationContextTest {
 
-    private lateinit var webTestClient : WebTestClient
+    private lateinit var webTestClient: WebTestClient
 
-    @Autowired
-    lateinit var context: ApplicationContext
-
-    @BeforeAll
-    fun initClient() {
+    @BeforeEach
+    fun initClient(context: ApplicationContext) {
         webTestClient = WebTestClient
                 .bindToApplicationContext(context)
-                .configureClient()
                 .build()
     }
 
@@ -43,6 +39,7 @@ class ReactiveKataApplicationContextTest {
         webTestClient.get().uri("/frp/hello-world")
                 .exchange()
                 .expectStatus().isOk
+                .expectBody().returnResult().responseBody.toString().contains("Hello Jeroen")
     }
 
     @Test
