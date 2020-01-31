@@ -2,15 +2,23 @@ package com.opentuned.reactivekata
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.ServerResponse
 
-class ReactiveKataApplicationRouterTest {
+@SpringBootTest
+class ReactiveKataApplicationRouterAndContextTest {
+
+	@Autowired
+	private lateinit var routerFunction: RouterFunction<ServerResponse>
 
 	private lateinit var webTestClient: WebTestClient;
 
 	@BeforeEach
 	fun setupWebClient() {
-		webTestClient = WebTestClient.bindToRouterFunction(RouterConfig().routerFunction()).build()
+		webTestClient = WebTestClient.bindToRouterFunction(routerFunction).build()
 	}
 
 	@Test
